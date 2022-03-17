@@ -1,0 +1,26 @@
+{
+  "name": "enspirebd",
+  "version": "1.0.0",
+  "description": "The backend of the website Enspire.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Computerization/EnspireBD.git"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Haoran Yang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Computerization/EnspireBD/issues"
+  },
+  "homepage": "https://github.com/Computerization/EnspireBD#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongodb": "^4.4.1"
+  }
+}
