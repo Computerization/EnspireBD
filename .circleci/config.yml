@@ -1,0 +1,61 @@
+# This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
+version: 2.1
+
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/2.0/orb-intro/
+
+jobs:
+
+  test-server-connection:
+    docker:
+      - image: circleci/node:16.13.1
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "cf:6e:be:38:32:ee:93:c5:83:fb:73:5c:b1:60:9b:05"
+      - attach_workspace:
+          at: ./backend
+      - run:
+          name: Communicate with server
+          command: |
+            echo $HOST_FINGERPRINT >> ~/.ssh/known_hosts
+            ls dist
+            ssh $REMOTE_ADDR "ls ${DEPLOY_DIR} && echo 'Hello!' > ${DEPLOY_DIR}/test.txt"
+
+  deploy-to-server:
+    docker:
+      - image: circleci/node:16.13.1
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "cf:6e:be:38:32:ee:93:c5:83:fb:73:5c:b1:60:9b:05"
+      - attach_workspace:
+          at: ./backend
+      - run:
+          name: Copy files to remote server
+          command: |
+            echo $HOST_FINGERPRINT >> ~/.ssh/known_hosts
+            scp -r dist/* ${REMOTE_ADDR}:${DEPLOY_DIR}
+
+orbs:
+  node: circleci/node@4.7
+
+
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
+workflows:
+  version: 2.1
+  deploy:
+    jobs:
+      - test-server-connection:
+          filters:
+            branches:
+              only: /circleci.*/
+      - deploy-to-server:
+          filters:
+            branches:
+              only: /master/
+
