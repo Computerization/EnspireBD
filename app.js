@@ -11,7 +11,7 @@ var dbo;
 MongoClient.connect(url, (err, db) => {
     if (err) throw err;
     dbo = db.db("test");
-    console.log("Connected correctly to database");
+    console.log("Connected to MongoDB");
 })
 
 app.use(require('cors')())
@@ -41,8 +41,6 @@ app.post('/api/register/', (req, res) => {
     res.header('Access-Control-Allow-Methods', '*');
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header('Access-Control-Allow-Headers', 'Content-Type');
-    console.log(req.body.username)
-    console.log(req.body.password)
     dbo.collection("userInfo").find({ "username": req.body.username }).toArray(function(err, result) {
         if (err) throw err;
         if (result == undefined)
