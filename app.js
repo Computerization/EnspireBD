@@ -26,13 +26,13 @@ app.post('/api/login/', (req, res) => {
     dbo.collection("userInfo").find({ "username": req.body.username }).toArray(function(err, result) {
         if (err) throw err;
         if (result == undefined)
-            res.send("Failed");
+            res.send("ConnectionFailed");
         else if (result.length == 0)
             res.send("UserNotFound");
         else if (result[0].password == req.body.password)
-            res.send("Correct");
+            res.send("PasswordCorrect");
         else
-            res.send("Wrong");
+            res.send("PasswordIncorrect");
     });
 });
 
