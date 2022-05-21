@@ -1,3 +1,5 @@
+const XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+
 const xhrregister = new XMLHttpRequest();
 const xhrlogin = new XMLHttpRequest();
 
